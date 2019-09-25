@@ -1,0 +1,9 @@
+API gateway for routing requests to microservices.
+
+URL : <host ip>:<host port>/api/<microservice path>
+
+Building docker image:
+docker build -t [tag-name] https://github.com/markocrnic/planthealthcare-gateway.git
+
+Running docker image:
+docker run -d -p 5003:5000 [planthealthcare-gateway-tag-name]

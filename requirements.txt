@@ -1,3 +1,2 @@
 flask
-schema
 flask_cors
