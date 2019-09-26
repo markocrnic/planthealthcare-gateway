@@ -12,7 +12,7 @@ def gateway(path):
 
     redirect_path = setpath(path)
     if redirect_path == '404':
-        return 'Path not found', 404
+        return {'msg': 'Path not found'}, 404
     else:
         print('Requested path: ' + redirect_path + ' | Requested method: ' + request.method)
         return redirect(redirect_path, code=307)
