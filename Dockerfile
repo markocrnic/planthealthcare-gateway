@@ -1,8 +1,18 @@
-FROM python:3.7-slim-buster
-LABEL maintainer="markons996@gmail.com"
+FROM python:3.6-alpine as base
+
+FROM base as builder
+
+RUN mkdir /install
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+WORKDIR /install
+COPY requirements.txt /requirements.txt
+RUN pip install --install-option="--prefix=/install" -r /requirements.txt
+
+FROM base
+
+COPY --from=builder /install /usr/local
 COPY . /app
+RUN apk --no-cache add libpq
 WORKDIR /app
-RUN pip install -r requirements.txt
-RUN chmod -R 777 /app
 EXPOSE 5000
 CMD ["python", "app/interface.py"]
