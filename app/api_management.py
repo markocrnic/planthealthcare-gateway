@@ -1,8 +1,68 @@
-def paths():
-    PATH_DICT = {
-        'users': 'http://10.0.200.68:5000/',
-        'flowers': 'http://10.0.200.68:5001/',
-        'users2flowers': 'http://10.0.200.68:5002/',
-        'usermanagement': 'http://10.0.200.68:5006/'
-    }
+from ast import literal_eval
+import ftputil
+import jwt
+
+
+PATH_DICT = {}
+
+
+def readpathsfromftp():
+
+    try:
+        f = open('paths.txt', 'r')
+        content = f.read()
+
+        return content
+
+    except:
+        return refreshpaths()
+
+
+def getpaths():
+    content = readpathsfromftp()
+    PATH_DICT = literal_eval(content)
+
     return PATH_DICT
+
+
+def refreshpaths():
+    try:
+        a_host = ftputil.FTPHost('10.0.200.68', 'empiry', '3mp1ry')
+
+        for (dirname, subdirs, files) in a_host.walk("/projects/planthealthcare/api-gateway/"):
+            for f in files:
+                if f == 'paths.txt':
+                    a_host.download(dirname + f, f)
+                    with open(f) as txtfile:
+                        content = txtfile.read()
+                        print(str(content))
+        a_host.close()
+
+        return content
+
+    except Exception as e:
+        print(e)
+        a_host.close()
+
+
+def checkTokenValiditi(request):
+    secret = 'planthealthcare'
+    try:
+        authorization_header = request.headers.get('Authorization')
+        token = authorization_header.split('Bearer ', 1)[1]
+    except:
+        print('Authorization header not present.')
+        return 403
+
+    try:
+
+        decoded = jwt.decode(token, secret, algorithms=['HS256'])
+        return decoded
+
+    except jwt.ExpiredSignatureError:
+        print('JWT token expired')
+        return 401
+
+    except:
+        print('Invalid JWT token')
+        return 400

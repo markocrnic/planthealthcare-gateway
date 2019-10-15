@@ -1,7 +1,7 @@
 from flask import Flask, redirect, request
 from flask_cors import CORS
-from api_management import paths
-import jwt
+from api_management import getpaths, refreshpaths, checkTokenValiditi
+
 
 
 app = Flask(__name__)
@@ -30,8 +30,16 @@ def gateway(path):
         return redirect(redirect_path, code=307)
 
 
+@app.route('/registerapi/', methods=['GET', 'POST'])
+def registerapi():
+    if request.method == 'GET':
+        return getpaths()
+    elif request.method == 'POST':
+        return refreshpaths()
+
+
 def setpath(path):
-    path_dict = paths()
+    path_dict = getpaths()
     apiname = path.split('/')[0]
     if apiname in path_dict:
         apipath = path_dict[apiname] + path
@@ -39,29 +47,6 @@ def setpath(path):
     else:
         print('Path not found: ' + path)
         return '404'
-
-
-def checkTokenValiditi(request):
-    secret = 'planthealthcare'
-    try:
-        authorization_header = request.headers.get('Authorization')
-        token = authorization_header.split('Bearer ', 1)[1]
-    except:
-        print('Authorization header not present.')
-        return 403
-
-    try:
-
-        decoded = jwt.decode(token, secret, algorithms=['HS256'])
-        return decoded
-
-    except jwt.ExpiredSignatureError:
-        print('JWT token expired')
-        return 401
-
-    except:
-        print('Invalid JWT token')
-        return 400
 
 
 if __name__ == '__main__':
