@@ -1,7 +1,6 @@
 from flask import Flask, redirect, request
 from flask_cors import CORS
-from api_management import getpaths, refreshpaths, checkTokenValiditi
-
+from api_management import getpaths, refreshpaths, checkTokenValiditi, setpath
 
 
 app = Flask(__name__)
@@ -36,17 +35,6 @@ def registerapi():
         return getpaths()
     elif request.method == 'POST':
         return refreshpaths()
-
-
-def setpath(path):
-    path_dict = getpaths()
-    apiname = path.split('/')[0]
-    if apiname in path_dict:
-        apipath = path_dict[apiname] + path
-        return apipath
-    else:
-        print('Path not found: ' + path)
-        return '404'
 
 
 if __name__ == '__main__':

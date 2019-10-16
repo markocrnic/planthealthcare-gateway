@@ -66,3 +66,14 @@ def checkTokenValiditi(request):
     except:
         print('Invalid JWT token')
         return 400
+
+
+def setpath(path):
+    path_dict = getpaths()
+    apiname = path.split('/')[0]
+    if apiname in path_dict:
+        apipath = path_dict[apiname] + path
+        return apipath
+    else:
+        print('Path not found: ' + path)
+        return '404'
