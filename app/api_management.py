@@ -45,6 +45,17 @@ def refreshpaths():
         a_host.close()
 
 
+def setpath(path):
+    path_dict = getpaths()
+    apiname = path.split('/')[0]
+    if apiname in path_dict:
+        apipath = path_dict[apiname] + path
+        return apipath
+    else:
+        print('Path not found: ' + path)
+        return '404'
+
+
 def checkTokenValiditi(request):
     secret = 'planthealthcare'
     try:
@@ -67,13 +78,3 @@ def checkTokenValiditi(request):
         print('Invalid JWT token')
         return 400
 
-
-def setpath(path):
-    path_dict = getpaths()
-    apiname = path.split('/')[0]
-    if apiname in path_dict:
-        apipath = path_dict[apiname] + path
-        return apipath
-    else:
-        print('Path not found: ' + path)
-        return '404'
