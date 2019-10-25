@@ -1,6 +1,6 @@
 from flask import Flask, redirect, request
 from flask_cors import CORS
-from api_management import getpaths, refreshpaths, checkTokenValiditi, setpath
+from api_management.api_management import getpaths, refreshpaths, checkTokenValiditi, setpath
 
 
 app = Flask(__name__)

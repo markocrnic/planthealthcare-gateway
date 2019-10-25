@@ -1,7 +1,10 @@
 from ast import literal_eval
 import ftputil
 import jwt
+from loadconfig import load_config
 
+
+config = load_config('config/config.yml')
 
 PATH_DICT = {}
 
@@ -27,9 +30,9 @@ def getpaths():
 
 def refreshpaths():
     try:
-        a_host = ftputil.FTPHost('10.0.200.68', 'empiry', '3mp1ry')
+        a_host = ftputil.FTPHost(config['ftp']['host'], config['ftp']['user'], config['ftp']['password'])
 
-        for (dirname, subdirs, files) in a_host.walk("/projects/planthealthcare/api-gateway/"):
+        for (dirname, subdirs, files) in a_host.walk(config['ftp']['path']):
             for f in files:
                 if f == 'paths.txt':
                     a_host.download(dirname + f, f)
