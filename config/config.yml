@@ -3,3 +3,8 @@ ftp:
   user: empiry
   password: 3mp1ry
   path: /projects/planthealthcare/api-gateway/
+
+jaeger:
+  host: 10.0.200.68
+  port: 5775
+  service_name: planthealthcare
