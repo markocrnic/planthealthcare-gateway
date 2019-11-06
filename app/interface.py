@@ -1,4 +1,6 @@
-from flask import Flask, redirect, request
+from flask import Flask, redirect, request, make_response
+import requests
+import json
 from flask_cors import CORS
 from api_management.api_management import getpaths, refreshpaths, checkTokenValiditi, setpath, createresponse
 from api_management.jaeger import initializejaeger
@@ -20,7 +22,10 @@ def gateway(path):
         if redirect_path == '404':
             return {'msg': 'Path not found'}, 404
         elif 'usermanagement' in redirect_path:
-            return redirect(redirect_path, code=307)
+            request_data = requests.post(redirect_path, headers={'content-type': 'application/json'}, data=json.dumps(request.json))
+            response = make_response(request_data.content)
+            response.headers['Content-Type'] = 'application/json'
+            return response, request_data.status_code
         else:
             print('Requested path: ' + redirect_path + ' | Requested method: ' + request.method)
 
