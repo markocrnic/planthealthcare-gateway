@@ -1,6 +1,6 @@
-FROM python:3.6-alpine as base
+FROM python:3.6-alpine AS base
 
-FROM base as builder
+FROM base AS builder
 
 RUN mkdir /install
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
