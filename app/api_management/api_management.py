@@ -8,6 +8,7 @@ import json
 
 
 config = load_config('config/config.yml')
+#config = load_config('../config/config.yml')
 PATH_DICT = {}
 headers = {'content-type': 'application/json'}
 
