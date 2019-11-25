@@ -1,10 +1,10 @@
 ftp:
-  host: 10.0.200.68
-  user: empiry
-  password: 3mp1ry
-  path: /projects/planthealthcare/api-gateway/
+  host: ${PHC_FTP_HOST}
+  user: ${PHC_FTP_USER}
+  password: ${PHC_FTP_PASSWORD}
+  path: ${PHC_FTP_PATH}
 
 jaeger:
-  host: 10.0.200.68
-  port: 5775
-  service_name: planthealthcare
+  host: ${PHC_JAEGER_HOST}
+  port: ${PHC_JAEGER_PORT}
+  service_name: ${PHC_JAEGER_NAME}
