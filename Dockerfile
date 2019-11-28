@@ -5,7 +5,6 @@ RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 WORKDIR /install
 COPY requirements.txt /requirements.txt
 RUN pip install --install-option='--prefix=/install' -r /requirements.txt
-RUN python3 -m pip install --install-option='--prefix=/install' tornado
 
 FROM python:3.6-alpine
 

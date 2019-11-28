@@ -8,3 +8,4 @@ jaeger_client
 Flask_OpenTracing
 requests
 opentracing-instrumentation
+tornado==5.1
