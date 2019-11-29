@@ -2,7 +2,7 @@ from flask import Flask, redirect, request, make_response
 import requests
 import json
 from flask_cors import CORS
-from api_management.api_management import getpaths, refreshpaths, checkTokenValiditi, setpath, createresponse
+from api_management.api_management import getpaths, checkTokenValiditi, setpath, createresponse
 from api_management.jaeger import initializejaeger
 
 
@@ -51,15 +51,13 @@ def gateway(path):
             return response, status_code
 
 
-@app.route('/registerapi/', methods=['GET', 'POST'])
+@app.route('/registerapi/', methods=['GET'])
 def registerapi():
     with tracer.start_active_span('Client test method') as scope:
         scope.span.log_kv({'event': 'Call to register api', 'request_method': request.method})
 
         if request.method == 'GET':
             return getpaths()
-        elif request.method == 'POST':
-            return refreshpaths()
 
 
 if __name__ == '__main__':
