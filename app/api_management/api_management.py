@@ -1,34 +1,29 @@
 from ast import literal_eval
-import ftputil
 import jwt
 from loadconfig import load_config
 from flask import make_response
 import requests
 import json
 
-
+# Use when deploying to container
 config = load_config('config/config.yml')
-#config = load_config('../config/config.yml')
+# Use when developing on Linux:
+# config = load_config('../config/config.yml')
+# Use when developing on windows:
+# config = load_config('..\..\config\config.yml')
+
 PATH_DICT = {}
 headers = {'content-type': 'application/json'}
 
 
-def readpathsfromftp():
-    try:
-        f = open('paths.txt', 'r')
-        content = f.read()
-
-        return content
-
-    except:
-        return refreshpaths()
-
-
 def getpaths():
-    content = readpathsfromftp()
-    PATH_DICT = literal_eval(content)
+    try:
+        content = config['api']['paths']
+        PATH_DICT = literal_eval(content)
 
-    return PATH_DICT
+        return PATH_DICT
+    except Exception as e:
+        print(e)
 
 
 def createresponse(request_data):
@@ -70,26 +65,6 @@ def createresponse(request_data):
     return response, status_code
 
 
-def refreshpaths():
-    try:
-        a_host = ftputil.FTPHost(config['ftp']['host'], config['ftp']['user'], config['ftp']['password'])
-
-        for (dirname, subdirs, files) in a_host.walk(config['ftp']['path']):
-            for f in files:
-                if f == 'paths.txt':
-                    a_host.download(dirname + f, f)
-                    with open(f) as txtfile:
-                        content = txtfile.read()
-                        print(str(content))
-        a_host.close()
-
-        return content
-
-    except Exception as e:
-        print(e)
-        a_host.close()
-
-
 def setpath(path):
     path_dict = getpaths()
     apiname = path.split('/')[0]
@@ -127,4 +102,3 @@ def checkTokenValiditi(request):
 def getConfig():
 
     return config
-

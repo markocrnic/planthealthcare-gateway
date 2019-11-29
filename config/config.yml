@@ -8,3 +8,6 @@ jaeger:
   host: ${PHC_JAEGER_HOST}
   port: ${PHC_JAEGER_PORT}
   service_name: ${PHC_JAEGER_NAME}
+
+api:
+  paths: ${PHC_API_PATHS}
